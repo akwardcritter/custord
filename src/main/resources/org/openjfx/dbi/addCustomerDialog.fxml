@@ -11,7 +11,7 @@
 
 <AnchorPane fx:controller="org.openjfx.dbi.AddCustomerDialogController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <GridPane hgap="5.0" layoutX="10.0" layoutY="10.0" vgap="5.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+      <GridPane hgap="5.0" layoutX="10.0" layoutY="10.0" vgap="5.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" fx:id="gpAddCustomer">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -48,8 +48,8 @@
             <TextField fx:id="tfCountry" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
                <buttons>
-                  <Button fx:id="btSave" mnemonicParsing="false" text="Save" />
-                  <Button fx:id="btCancel" mnemonicParsing="false" text="Cancel" />
+                  <Button fx:id="btSave" mnemonicParsing="false" onAction="#saveNewCustomer" text="Save" />
+                  <Button fx:id="btCancel" mnemonicParsing="false" onAction="#cancelAddingNewCustomer" text="Cancel" />
                </buttons>
             </ButtonBar>
          </children>

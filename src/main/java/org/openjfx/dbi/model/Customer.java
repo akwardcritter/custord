@@ -11,15 +11,19 @@ public class Customer extends Person {
 
     public Customer(int customerNumber, String customerName, String contactLastName, String contactFirstName,
             String phone,
-            String addressLine1, String addressLine2, String city, String country) {
-        this(customerNumber, customerName, contactLastName, contactFirstName, phone, addressLine1, city, country);
-        this.addressLine2 = addressLine2;
-    }
-
-    public Customer(int customerNumber, String customerName, String contactLastName, String contactFirstName,
-            String phone,
             String addressLine1, String city, String country) {
         super(customerNumber, contactLastName, contactFirstName);
+        this.phone = phone;
+        this.addressLine1 = addressLine1;
+        this.city = city;
+        this.country = country;
+        this.customerName = customerName;
+    }
+
+    public Customer(String customerName, String contactLastName, String contactFirstName,
+            String phone,
+            String addressLine1, String city, String country) {
+        super(contactLastName, contactFirstName);
         this.phone = phone;
         this.addressLine1 = addressLine1;
         this.city = city;

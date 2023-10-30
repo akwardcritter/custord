@@ -36,9 +36,49 @@ public class CustomerDAO {
         return customers;
     }
 
+    public static void addCustomer(Customer customer) throws SQLException {
+        Connection con;
+        String addString = "INSERT INTO customers (customerName, contactLastName, contactFirstName, phone, addressLine1, city, country) ";
+        addString += "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            con = DBConnector.connect();
+            PreparedStatement addCustomer = con.prepareStatement(addString);
+
+            addCustomer.setString(1, customer.getCustomerName());
+            addCustomer.setString(2, customer.getLastName());
+            addCustomer.setString(3, customer.getFirstName());
+            addCustomer.setString(4, customer.getPhone());
+            addCustomer.setString(5, customer.getAddressLine1());
+            addCustomer.setString(6, customer.getCity());
+            addCustomer.setString(7, customer.getCountry());
+
+            addCustomer.executeUpdate();
+        } catch (SQLException err) {
+            System.err.println(err.getMessage());
+        }
+    }
+
+    public static void deleteCustomer(Customer customer) throws SQLException {
+        Connection con;
+        String deleteString = "DELETE FROM customers WHERE customerNumber = ?";
+
+        try {
+            con = DBConnector.connect();
+            PreparedStatement deleteCustomer = con.prepareStatement(deleteString);
+
+            deleteCustomer.setInt(1, customer.getId());
+
+            deleteCustomer.executeUpdate();
+        } catch (SQLException err) {
+            System.err.println(err.getMessage());
+
+        }
+    }
+
     public static void updateCustomer(Customer customer) throws SQLException {
         Connection con;
-        String updateString = "update customers set customerName = ?, contactLastName = ?, contactFirstName = ?, ";
+        String updateString = "UPDATE customers SET customerName = ?, contactLastName = ?, contactFirstName = ?, ";
         updateString += "phone = ?, addressLine1 = ?, city = ?, country = ? WHERE customerNumber = ?";
         try {
             con = DBConnector.connect();
@@ -52,6 +92,8 @@ public class CustomerDAO {
             updateCustomer.setString(6, customer.getCity());
             updateCustomer.setString(7, customer.getCountry());
             updateCustomer.setInt(8, customer.getId());
+
+            System.out.println(updateCustomer);
 
             updateCustomer.executeUpdate();
 

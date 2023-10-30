@@ -2,6 +2,10 @@ package org.openjfx.dbi;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.openjfx.dbi.model.Customer;
@@ -15,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -31,6 +36,9 @@ public class HomePageController implements Initializable {
 
     @FXML
     private MenuItem miAddCustomer;
+
+    @FXML
+    private MenuItem miDeleteCustomer;
 
     @FXML
     private MenuItem miEditCustomer;
@@ -85,6 +93,28 @@ public class HomePageController implements Initializable {
     }
 
     @FXML
+    void openDeleteCustomerDialog(ActionEvent event) throws SQLException {
+
+        if (selectedCustomer != null) {
+            // Load the FXML file for the edit dialog
+            List<String> choices = Arrays.asList("NO", "YES");
+
+            String userChoice = showChoice("Delete Customer", null,
+                    "Do you really want to delete this customer? This action cannot be undone.", choices, "NO");
+
+            if (userChoice.equals("YES")) {
+                CustomerDAO.deleteCustomer(selectedCustomer);
+            }
+
+        } else {
+            // If no customer is selected, show an error alert
+            showAlert(Alert.AlertType.ERROR, "Form Error!",
+                    "Please select a customer to delete");
+        }
+
+    }
+
+    @FXML
     void openEditCustomerDialog(ActionEvent event) throws IOException {
         // Check if a customer is selected
         if (selectedCustomer != null) {
@@ -116,13 +146,27 @@ public class HomePageController implements Initializable {
         }
     }
 
-    private static void showAlert(Alert.AlertType alertType, String title, String message) {
+    public static void showAlert(Alert.AlertType alertType, String title, String message) {
 
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.show();
+    }
+
+    public static String showChoice(String title, String header, String content, List<String> choices,
+            String selected) {
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(selected, choices);
+        dialog.setTitle(title);
+        dialog.setHeaderText(header);
+        dialog.setContentText(content);
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            return result.get();
+        }
+        return null;
     }
 
     @Override
