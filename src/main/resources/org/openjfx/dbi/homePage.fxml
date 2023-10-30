@@ -30,6 +30,7 @@
                   <items>
                     <MenuItem fx:id="miEditCustomer" mnemonicParsing="false" onAction="#openEditCustomerDialog" text="Edit Customer" />
                         <MenuItem fx:id="miAddCustomer" mnemonicParsing="false" onAction="#openAddCustomerDialog" text="Add customer" />
+                    <MenuItem fx:id="miDeleteCustomer" mnemonicParsing="false" onAction="#openDeleteCustomerDialog" text="Delete Customer" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Products">
