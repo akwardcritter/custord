@@ -10,9 +10,12 @@ import java.util.ResourceBundle;
 
 import org.openjfx.dbi.model.Customer;
 import org.openjfx.dbi.model.CustomerDAO;
+import org.openjfx.dbi.util.MutationEvent;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -71,6 +74,11 @@ public class HomePageController implements Initializable {
     private TableView<Customer> tvCustomers;
 
     @FXML
+    public TableView<Customer> getCustomerTable() {
+        return tvCustomers;
+    }
+
+    @FXML
     private void handleTvMouseClicked(MouseEvent event) {
         System.out.println("clicked");
         selectedCustomer = tvCustomers.getSelectionModel().getSelectedItem();
@@ -90,6 +98,7 @@ public class HomePageController implements Initializable {
         stage.setScene(scene);
         stage.setTitle("Add customer");
         stage.showAndWait();
+        Event.fireEvent(tvCustomers, new MutationEvent(MutationEvent.MutationType.UPDATE));
     }
 
     @FXML
@@ -104,6 +113,7 @@ public class HomePageController implements Initializable {
 
             if (userChoice.equals("YES")) {
                 CustomerDAO.deleteCustomer(selectedCustomer);
+                Event.fireEvent(tvCustomers, new MutationEvent(MutationEvent.MutationType.DELETE));
             }
 
         } else {
@@ -139,6 +149,7 @@ public class HomePageController implements Initializable {
             // Set title and show the stage
             stage.setTitle("Edit customer");
             stage.showAndWait();
+            Event.fireEvent(tvCustomers, new MutationEvent(MutationEvent.MutationType.UPDATE));
         } else {
             // If no customer is selected, show an error alert
             showAlert(Alert.AlertType.ERROR, "Form Error!",
@@ -183,6 +194,14 @@ public class HomePageController implements Initializable {
         tcAddressLine1.setCellValueFactory(new PropertyValueFactory<>("addressLine1"));
         tcCity.setCellValueFactory(new PropertyValueFactory<>("city"));
         tcCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
+
+        tvCustomers.addEventHandler(MutationEvent.MUTATION, new EventHandler<MutationEvent>() {
+            @Override
+            public void handle(MutationEvent event) {
+                // Handle the event here
+                tvCustomers.setItems(CustomerDAO.getCustomers());
+            }
+        });
 
     }
 
